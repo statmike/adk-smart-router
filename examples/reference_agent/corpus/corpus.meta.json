@@ -1,0 +1,31 @@
+{
+  "corpus_source": "synthetic",
+  "generated_at": "2026-09-04T18:00:09.715136+00:00",
+  "run_started_at": "2026-09-04T17:59:49.559713+00:00",
+  "generator": {
+    "script": "scripts/generate_corpus.py",
+    "git": {
+      "commit": "27a79641c35e75c5558fa94307ec95980aec3020",
+      "dirty": true
+    },
+    "personas_sha256": "48297f5a0e50e99ae8551849b03d7eed31fdb7d8b24a74f608cee80d9571955f",
+    "scenarios_sha256": "ebfd42c2c356add97fa193063d66f2c0c79a0e9f9444b4a6256d3c847021724a"
+  },
+  "models": {
+    "agent": "gemini-2.5-flash",
+    "customer_simulator": "gemini-2.5-flash"
+  },
+  "seed": 20260904,
+  "sessions": 1700,
+  "turns": 5372,
+  "rows": 45349,
+  "bigquery": {
+    "dataset": "smart_router",
+    "table": "agent_events",
+    "location": "US",
+    "agent": "support",
+    "session_prefix": "corpus-20260904-"
+  },
+  "estimated_cost_usd": 45.32,
+  "caveat": "Gemini is nondeterministic, so re-running the generator produces a different corpus. Preflight numbers are reproducible from this artifact, not from the seed. P4 is a pipeline test on this data, not a gate, and no lift number measured here may be published (DESIGN.md 3.3, R12, R13)."
+}

@@ -1,0 +1,63 @@
+# Environments
+.venv/
+env/
+venv/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+
+# IDEs & Tools
+.vscode/
+.idea/
+.cursor/
+.windsurf/
+
+# OS Generated
+.DS_Store
+Thumbs.db
+
+# Secrets & Local Config (GCP auth uses ADC — never commit credentials)
+.env
+.env.*
+
+# Service Account keys must never be committed (ADC only)
+*-key.json
+*_key.json
+service-account*.json
+*credentials*.json
+gcp-*.json
+
+# Packaging Artifacts
+*.egg-info/
+build/
+dist/
+
+# Logs
+*.log
+
+# The corpus is committed GZIPPED (~11 MB). Uncompressed it is 167 MB, which GitHub
+# refuses outright. If you unpack it to look at it, the unpacked copy stays local.
+examples/reference_agent/corpus/*.jsonl
+# Local run journals. Progress and triage for generate_corpus.py and run_ab.py,
+# not deliverables. generate_corpus.py writes its own .gitignore into .corpus_runs/
+# as a belt-and-braces; run_ab.py relies on this line.
+.ab_runs/
+# Tuned settings, written by retrain.sh and read by publish_router.py --settings. They
+# describe one agent's traffic in one project, not the package, and each cycle overwrites
+# them. Keep them beside whatever runs the schedule, not in the repo.
+settings/
+.xlam/
+# Generated on demand by `scripts/build_xlam_agent.py --fetch` from Hugging Face
+# so CC-BY-4.0 dataset derivatives are not redistributed in the repository.
+examples/xlam_agent/queries.jsonl
+examples/xlam_agent/tools.py

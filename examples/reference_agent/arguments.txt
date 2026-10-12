@@ -1,0 +1,93 @@
+# The reference agent's 74 required-argument names, marked by whether a customer
+# holds the value. Written by hand from the tool docstrings; this is the ten
+# minutes the router asks of an adopter, done once so there is a worked example.
+#
+#   smart-router qualify --app examples.reference_agent.agent:root_agent \
+#       --arguments examples/reference_agent/arguments.txt
+#
+# It comes back 66 reachable and 34 second hop. Checked against the corpus, 45 of
+# the 48 tools that were ever a session's first call are in the reachable 66, and
+# the 34 second-hop tools account for 5 first calls out of 1,412 sessions.
+#
+# The nine `held` lines carry the whole result and each is a judgement, not a
+# pattern. `sku` is held because the shop assigns it and `order_id` is supplied
+# because the customer was emailed it, and nothing in either schema says so. The
+# ones that took the longest were `account_id` (business customers do quote it,
+# so supplied) and `reservation_id` (the customer is given the reference, so
+# supplied). Getting one of these wrong moves whole blocks of tools at once,
+# which is why the list is ordered by how many each gates.
+
+sku                        held       # gates 19 tools
+order_id                   supplied   # gates 13 tools
+reason                     supplied   # gates 10 tools
+category                   supplied   # gates 7 tools
+amount                     supplied   # gates 6 tools
+quantity                   supplied   # gates 6 tools
+subscription_id            held       # gates 6 tools
+account_id                 supplied   # gates 5 tools
+store_id                   held       # gates 4 tools
+reference                  supplied   # gates 4 tools
+topic                      supplied   # gates 3 tools
+destination_zip            supplied   # gates 2 tools
+body                       supplied   # gates 2 tools
+repair_id                  held       # gates 2 tools
+card_number                supplied   # gates 2 tools
+code                       supplied   # gates 2 tools
+review_id                  held       # gates 2 tools
+detail                     supplied   # gates 2 tools
+reservation_id             supplied   # gates 2 tools
+days                       supplied   # gates 2 tools
+country_code               supplied   # gates 2 tools
+declared_value             supplied   # gates 2 tools
+status                     supplied   # gates 1 tool
+address                    supplied   # gates 1 tool
+return_id                  supplied   # gates 1 tool
+tracking_number            supplied   # gates 1 tool
+weight_kg                  supplied   # gates 1 tool
+speed                      supplied   # gates 1 tool
+brand                      supplied   # gates 1 tool
+last4                      supplied   # gates 1 tool
+expires                    supplied   # gates 1 tool
+query                      supplied   # gates 1 tool
+max_results                supplied   # gates 1 tool
+new_email                  supplied   # gates 1 tool
+subject                    supplied   # gates 1 tool
+priority                   supplied   # gates 1 tool
+status_filter              supplied   # gates 1 tool
+resume_on                  supplied   # gates 1 tool
+frequency                  supplied   # gates 1 tool
+billing_period             supplied   # gates 1 tool
+serial_number              supplied   # gates 1 tool
+fault_description          supplied   # gates 1 tool
+state                      supplied   # gates 1 tool
+centre_id                  held       # gates 1 tool
+preferred_date             supplied   # gates 1 tool
+recipient_email            supplied   # gates 1 tool
+order_total                held       # gates 1 tool
+retailer                   supplied   # gates 1 tool
+their_price                supplied   # gates 1 tool
+minimum_rating             supplied   # gates 1 tool
+rating                     supplied   # gates 1 tool
+title                      supplied   # gates 1 tool
+note                       supplied   # gates 1 tool
+cart_id                    held       # gates 1 tool
+postcode                   supplied   # gates 1 tool
+radius_miles               supplied   # gates 1 tool
+day                        supplied   # gates 1 tool
+verification_reference     held       # gates 1 tool
+kind                       supplied   # gates 1 tool
+case_id                    supplied   # gates 1 tool
+method                     supplied   # gates 1 tool
+channel                    supplied   # gates 1 tool
+contents                   supplied   # gates 1 tool
+from_currency              supplied   # gates 1 tool
+to_currency                supplied   # gates 1 tool
+quote_reference            supplied   # gates 1 tool
+po_number                  supplied   # gates 1 tool
+certificate_number         supplied   # gates 1 tool
+days_ahead                 supplied   # gates 1 tool
+slot_date                  supplied   # gates 1 tool
+slot_time                  supplied   # gates 1 tool
+phone                      supplied   # gates 1 tool
+new_date                   supplied   # gates 1 tool
+window                     supplied   # gates 1 tool

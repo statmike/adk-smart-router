@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+title: "adk-smart-router: Predictive Semantic Tool Router and Principal-Scoped Tool Cache for Google ADK Agents"
+message: "If you use adk-smart-router in your research or production systems, please cite it using the metadata from this file."
+type: software
+authors:
+  - given-names: Mike
+    family-names: Henderson
+repository-code: "https://github.com/statmike/adk-smart-router"
+url: "https://github.com/statmike/adk-smart-router"
+license: Apache-2.0
+version: "1.0.0"
+date-released: "2026-10-12"
+keywords:
+  - google-adk
+  - llm
+  - agents
+  - tool-calling
+  - prompt-caching
+  - semantic-routing
+  - bigquery-ml
+  - xgboost

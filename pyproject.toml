@@ -1,0 +1,166 @@
+[build-system]
+requires = ["hatchling", "hatch-fancy-pypi-readme>=24.1"]
+build-backend = "hatchling.build"
+
+[project]
+name = "adk-smart-router"
+version = "1.0.0"
+description = "A predictive semantic router for Google ADK agents: prune the tool menu once per session, and skip tool calls whose answer is already known."
+dynamic = ["readme"]
+requires-python = ">=3.11"
+license = { text = "Apache-2.0" }
+authors = [{ name = "Mike Henderson" }]
+keywords = ["google-adk", "llm", "agents", "tool-calling", "prompt-caching", "routing"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    # Every one of these is a job in CI. `requires-python` says which versions are
+    # allowed to install the package; this list says which ones are actually tested.
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Typing :: Typed",
+]
+dependencies = [
+    "google-adk[bigquery-analytics]>=2.8",
+    "google-cloud-storage>=2.18",
+    "google-genai>=2.20",
+    "numpy>=1.26",
+    "xgboost>=2.1",
+]
+
+[project.optional-dependencies]
+all = []
+
+# The install-time front door: `smart-router qualify` answers whether pruning can pay for
+# an agent before any of GCP is provisioned, `smart-router readiness` asks whether the
+# analytics log already holds a corpus to train on, and `smart-router doctor` checks the
+# wiring that fails silently. See src/adk_smart_router/cli.py.
+[project.scripts]
+smart-router = "adk_smart_router.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/statmike/adk-smart-router"
+Repository = "https://github.com/statmike/adk-smart-router"
+Documentation = "https://github.com/statmike/adk-smart-router#readme"
+Changelog = "https://github.com/statmike/adk-smart-router/blob/main/CHANGELOG.md"
+Issues = "https://github.com/statmike/adk-smart-router/issues"
+
+# Dev-only tooling (PEP 735). Installed by `uv sync` locally and in CI; not a
+# runtime dependency of the project.
+[dependency-groups]
+dev = [
+    "ruff>=0.9",
+    "mypy>=1.15",
+    "pytest>=8",
+    "pytest-asyncio>=0.24",
+    "sqlalchemy[asyncio]>=2.0",
+    "aiosqlite>=0.20",
+    # Only `tests/test_tool_origins.py` needs this. ADK's `McpToolset` imports `mcp` at module
+    # scope, so an MCP tool cannot be built without it, and the whole point of that file is to
+    # prune a real one rather than a stand-in. It is not a runtime dependency: nothing under
+    # src/ imports it, and an adopter who uses MCP already has it through their own toolset.
+    "mcp>=1.9,<2",
+]
+# One experiment's dependency, not the project's and not CI's. `score_local_embedder.py`
+# asks whether a CPU ONNX model could replace the remote embedding hop, which needs an ONNX
+# runtime and a model to run in it. Nothing under src/ imports this, and no test needs it, so
+# it is not in `default-groups` and `uv sync` leaves it out. Run that script with
+# `uv run --group experiments`.
+experiments = [
+    "fastembed>=0.8.0",
+]
+# What `adk deploy agent_engine` needs on the machine doing the deploying, and only there.
+# ADK's deploy path builds a container in Cloud Build and talks to the Agent Platform control
+# plane through `vertexai.Client`, which lives in google-cloud-aiplatform. The deployed image
+# installs its own copy; nothing under src/ imports it, no test needs it, and CI never
+# deploys, so it stays out of `default-groups`. Run `scripts/deploy_agent_engine.sh`, which
+# invokes `uv run --group deploy adk deploy agent_engine`.
+deploy = [
+    "google-cloud-aiplatform[adk,agent_engines]>=1.95",
+]
+
+# --- Packaging ----------------------------------------------------------------
+# Only src/adk_smart_router ships. examples/ and scripts/ are repository assets, not
+# library code, and docs/install.md explains why: the GCP training and operations
+# scripts run from a clone rather than from the wheel.
+#
+# `packages` already carries src/adk_smart_router/sql, because hatchling takes every
+# tracked file under a package directory. A force-include of the same directory made
+# the build fail outright with "a second file is being added at the same path", which
+# `uv build` is now run in CI to catch.
+[tool.hatch.build.targets.wheel]
+packages = ["src/adk_smart_router"]
+
+# Keep the source distribution focused on code, tests, docs, and operational scripts
+# rather than shipping the 7.3 MB offline experiment corpus or CI/lockfile state.
+[tool.hatch.build.targets.sdist]
+exclude = [
+    "/.github",
+    "/examples/reference_agent/corpus",
+    "/plugin.json",
+    "/skills",
+    "/uv.lock",
+]
+
+# Rewrite relative repository links in README.md to absolute GitHub URLs in the
+# built wheel/sdist metadata so every link on the PyPI project page resolves.
+[tool.hatch.metadata.hooks.fancy-pypi-readme]
+content-type = "text/markdown"
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
+path = "README.md"
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.substitutions]]
+pattern = '\]\((?!https?://|#|mailto:)\.?/?([^)]+)\)'
+replacement = '](https://github.com/statmike/adk-smart-router/blob/main/\1)'
+
+# --- Linting & formatting: enforces the "flat, human-scannable" standard -------
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.format]
+# Ruff formats fenced Python inside Markdown. Documentation code blocks include
+# illustrations with aligned trailing comments, which the formatter collapses.
+exclude = ["*.md"]
+
+[tool.ruff.lint]
+# A pragmatic set that pushes toward simple, typed, flat code.
+select = [
+    "E", "W",   # pycodestyle
+    "F",        # pyflakes
+    "I",        # isort (import ordering)
+    "UP",       # pyupgrade
+    "B",        # flake8-bugbear
+    "SIM",      # flake8-simplify (discourages needless nesting/complexity)
+    "ANN",      # flake8-annotations (type hints required)
+]
+
+[tool.ruff.lint.per-file-ignores]
+# Tests may skip return-type annotations on test functions.
+"tests/**" = ["ANN"]
+# Scripts and the reference agent are runners and fixtures, not library code.
+"scripts/**" = ["ANN"]
+"examples/**" = ["ANN201", "ANN001"]
+
+# --- Type checking: strict hints on all signatures -----------------------------
+[tool.mypy]
+python_version = "3.11"
+strict = true
+files = ["src"]
+# Third-party GCP libs often ship incomplete stubs; don't fail on their imports.
+ignore_missing_imports = true
+
+# --- Tests --------------------------------------------------------------------
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+# Makes the package, the reference agent and the scripts importable from tests
+# without an editable install. `scripts` is here for publish_router.py, whose
+# reconciliation decides the label mapping every served prediction depends on.
+pythonpath = ["src", "examples", "scripts"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"

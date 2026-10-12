@@ -1,0 +1,66 @@
+name: CI
+
+# Enforces CODE_STANDARDS on every push and PR: flat, formatted, strictly-typed
+# Python, with tests. Turns the golden rules from prose into merge gates.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    # One job per version the package claims to support. `requires-python` is a promise
+    # and this matrix is the only thing that keeps it honest: the gate ran on 3.11 alone
+    # for months while `pyproject.toml` advertised more than that. The list here and the
+    # classifiers in `pyproject.toml` are meant to be the same list.
+    #
+    # `fail-fast: false` because "3.13 broke" and "everything broke" want different
+    # responses, and cancelling the other two hides which one it is.
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    name: quality (py${{ matrix.python-version }})
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install uv and Python ${{ matrix.python-version }}
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+          # Overrides .python-version, which stays at the floor for local development.
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: uv sync --all-groups
+
+      - name: Lint (ruff)
+        run: uv run ruff check .
+
+      - name: Format check (ruff)
+        run: uv run ruff format --check .
+
+      - name: Type check (mypy)
+        # Skips until src/ has Python; fails on real type errors once it does.
+        run: |
+          if find src -name '*.py' | grep -q .; then
+            uv run mypy --python-version ${{ matrix.python-version }}
+          else
+            echo "No Python in src/ yet — skipping mypy."
+          fi
+
+      - name: Tests (pytest)
+        # Tolerates "no tests collected" (exit 5) so a fresh template passes;
+        # fails on any real test failure once tests exist.
+        run: uv run pytest || { code=$?; [ "$code" -eq 5 ] && echo "No tests yet — skipping." && exit 0; exit "$code"; }
+
+      - name: Install the wheel and run the first minute
+        # Every step above points at the source tree, which is how the wheel once failed
+        # to build for a week while lint, types and 877 tests stayed green: a
+        # force-include duplicated the SQL directory and nothing was looking at the
+        # artifact. This builds it, installs it into an empty environment and runs the
+        # two commands a new user runs first, against examples/tiny_agent. No cloud, no
+        # credentials, no model call.
+        run: ./scripts/check_install.sh

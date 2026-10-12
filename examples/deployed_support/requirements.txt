@@ -1,0 +1,19 @@
+# What the deployed container installs, on top of the google-adk that ADK's own Dockerfile
+# pins and the google-cloud-aiplatform[adk,agent_engines] it appends for Agent Platform.
+#
+# These are the router's own runtime dependencies, copied from pyproject.toml, and
+# tests/test_deployed_support.py fails if the two lists ever drift apart.
+#
+# adk-smart-router itself is not here. While the repository is private the deploy script
+# stages src/adk_smart_router into the image with --extra_packages, which puts it on
+# PYTHONPATH without an install. Once the repository is public, delete the staging and add:
+#
+#   adk-smart-router @ git+https://github.com/statmike/adk-smart-router
+#
+# and these five lines come along as its dependencies.
+
+google-adk[bigquery-analytics]>=2.8
+google-cloud-storage>=2.18
+google-genai>=2.20
+numpy>=1.26
+xgboost>=2.1

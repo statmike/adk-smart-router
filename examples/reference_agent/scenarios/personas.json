@@ -1,0 +1,359 @@
+{
+  "schema_version": 1,
+  "purpose": "Customer-side inputs for scripts/generate_corpus.py. Read scenarios/README.md before editing.",
+  "blindness_rule": "No file in this directory may name, paraphrase or hint at a tool, a schema or an agent capability. These texts describe a person and their problem in the words that person would use. The label comes from what Gemini chose when the real agent ran (DESIGN.md 3.3).",
+  "personas": [
+    {
+      "id": "p01",
+      "situation": "Bought a stand mixer as a wedding present and the delivery date has come and gone with no package.",
+      "mood": "anxious, the wedding is on Saturday",
+      "facts": [
+        "order number A-88214, placed 12 August",
+        "the mixer is the 5 quart one in sage green",
+        "it was supposed to arrive 20 August",
+        "delivering to a flat with a buzzer that does not work"
+      ]
+    },
+    {
+      "id": "p02",
+      "situation": "Ordered two pairs of running shoes in different sizes intending to send one back, and now wants to send one back.",
+      "mood": "matter-of-fact, has done this before",
+      "facts": [
+        "order number B-41077",
+        "kept the 9.5, sending back the 10",
+        "the box was opened but nothing was worn outside",
+        "bought them 3 September"
+      ]
+    },
+    {
+      "id": "p03",
+      "situation": "Sent something back three weeks ago and the money has not appeared on the card.",
+      "mood": "irritated and starting to doubt the company",
+      "facts": [
+        "order number C-13390",
+        "the parcel was handed over at the drop-off point on 2 August",
+        "paid with the card ending 4412",
+        "the amount was 219.00"
+      ]
+    },
+    {
+      "id": "p04",
+      "situation": "Received the wrong item: ordered a desk lamp, a phone case arrived.",
+      "mood": "blunt, wants it fixed today",
+      "facts": [
+        "order number D-55021",
+        "the box had someone else's name on the slip",
+        "the lamp was the black articulated one",
+        "arrived 28 August"
+      ]
+    },
+    {
+      "id": "p05",
+      "situation": "Shopping for a birthday present and has not bought anything yet, comparing two coffee grinders.",
+      "mood": "cheerful, browsing without urgency",
+      "facts": [
+        "birthday is in eleven days",
+        "budget is around 120",
+        "wants something quiet enough for a small kitchen",
+        "has never bought from this shop before"
+      ]
+    },
+    {
+      "id": "p06",
+      "situation": "Saw a jacket at one price yesterday and a different price today, and wants to know which one they will be charged.",
+      "mood": "skeptical",
+      "facts": [
+        "the waxed cotton jacket in olive, medium",
+        "saw 148 yesterday evening",
+        "sees 165 now",
+        "has a code from a newsletter that may or may not still work"
+      ]
+    },
+    {
+      "id": "p07",
+      "situation": "Moved house four days ago and has a parcel already on its way to the old address.",
+      "mood": "rushed, typing on a phone between meetings",
+      "facts": [
+        "order number E-72248",
+        "moved from 14 Elm Row to 3 Bankside Court",
+        "the parcel left the warehouse on Monday",
+        "the old tenants are strangers"
+      ]
+    },
+    {
+      "id": "p08",
+      "situation": "Runs a small cafe and buys supplies for the business, needs paperwork for the accountant.",
+      "mood": "polite but firm, doing admin at the end of a long day",
+      "facts": [
+        "three orders in July, roughly 900 in total",
+        "the business name is Marlowe and Sons",
+        "the accountant needs it before the 15th",
+        "the last order number is F-90114"
+      ]
+    },
+    {
+      "id": "p09",
+      "situation": "Card on the account expired and the reorder they set up did not go through.",
+      "mood": "mildly embarrassed",
+      "facts": [
+        "the old card ended 0921 and expired last month",
+        "has a new card from the same bank",
+        "the reorder is for espresso beans, two bags a month",
+        "the failed attempt was 1 September"
+      ]
+    },
+    {
+      "id": "p10",
+      "situation": "Wants to know how much loyalty credit has built up before deciding whether to buy now or wait.",
+      "mood": "curious, doing mental arithmetic",
+      "facts": [
+        "has been buying here for about two years",
+        "thinks there should be somewhere near 4,000 points",
+        "is eyeing a 300 pair of headphones",
+        "last purchase was in June"
+      ]
+    },
+    {
+      "id": "p11",
+      "situation": "Changed jobs and the account still has the old work email on it, which no longer receives anything.",
+      "mood": "practical",
+      "facts": [
+        "the old address ends in @northbridge-eng.co",
+        "the new one is personal, ends in @fastmail.com",
+        "has not been getting delivery notifications for two weeks",
+        "still knows the password"
+      ]
+    },
+    {
+      "id": "p12",
+      "situation": "Package arrived crushed and the contents rattle.",
+      "mood": "frustrated but reasonable",
+      "facts": [
+        "order number G-30877",
+        "a ceramic planter set, four pieces",
+        "the courier left it against the bins in the rain",
+        "arrived yesterday afternoon"
+      ]
+    },
+    {
+      "id": "p13",
+      "situation": "Ordering from abroad for the first time and worried about customs charges and how long it takes.",
+      "mood": "worried about hidden costs",
+      "facts": [
+        "shipping to Dublin",
+        "the basket is around 260",
+        "needs it before the 30th",
+        "has been stung by a handling fee before"
+      ]
+    },
+    {
+      "id": "p14",
+      "situation": "Retired, not confident online, and cannot work out what happened to an order their daughter helped them place.",
+      "mood": "confused and apologetic",
+      "facts": [
+        "thinks the order was made on a Tuesday",
+        "it is a garden kneeler and a pair of secateurs",
+        "does not know the order number",
+        "the email is under the daughter's name"
+      ]
+    },
+    {
+      "id": "p15",
+      "situation": "Bought a thing that stopped working after five months and wants to know whether it is covered.",
+      "mood": "resigned, expecting to be told no",
+      "facts": [
+        "order number H-11902, bought 4 April",
+        "a cordless vacuum, the mid-range one",
+        "the battery no longer holds charge past ten minutes",
+        "still has the box"
+      ]
+    },
+    {
+      "id": "p16",
+      "situation": "Impatient power user with several open orders who wants a quick sweep of all of them in one go.",
+      "mood": "brisk, types in fragments",
+      "facts": [
+        "four things outstanding right now",
+        "one of them is a monitor arm, ordered 26 August",
+        "one is a set of shelf brackets that may already be here",
+        "does not want to be asked for the numbers, they are in the account"
+      ]
+    },
+    {
+      "id": "p17",
+      "situation": "Waiting for something that was out of stock and wants to know whether it has come back before committing.",
+      "mood": "patient but persistent, has asked before",
+      "facts": [
+        "the walnut bookshelf, 180 cm",
+        "was told two to three weeks, that was four weeks ago",
+        "would take the oak one if the walnut is hopeless",
+        "has a note in the calendar to keep checking"
+      ]
+    },
+    {
+      "id": "p18",
+      "situation": "Noticed a charge they do not recognise and is worried the account has been used by someone else.",
+      "mood": "alarmed, close to phoning the bank",
+      "facts": [
+        "a charge of 74.99 dated 29 August",
+        "was on holiday with no internet that week",
+        "has two addresses saved, one of them very old",
+        "the last thing they actually bought was in May"
+      ]
+    },
+    {
+      "id": "p19",
+      "situation": "Bought a gift and needs it to arrive without a price on the paperwork, and wants the fastest option.",
+      "mood": "slightly stressed, leaving it late",
+      "facts": [
+        "order number J-64530, not yet dispatched",
+        "going to a different address than usual, a work reception",
+        "the recipient must not see what it cost",
+        "needed by Friday"
+      ]
+    },
+    {
+      "id": "p20",
+      "situation": "Generally fed up after two failed deliveries and one unanswered message, and is close to giving up on the company.",
+      "mood": "angry, threatening to take it further",
+      "facts": [
+        "order number K-20458, twice attempted",
+        "wrote in on 21 August and got nothing back",
+        "has been a customer for six years",
+        "wants to speak to a person, not a machine"
+      ]
+    },
+    {
+      "id": "p21",
+      "situation": "Has a monthly repeat order of coffee arriving faster than they can drink it and wants it slowed down or stopped for a while.",
+      "mood": "mildly embarrassed, three unopened bags on the counter",
+      "facts": [
+        "the coffee turns up on the 4th of every month",
+        "there are three bags unopened already",
+        "going away for most of October",
+        "does not want to lose the price they signed up at"
+      ]
+    },
+    {
+      "id": "p22",
+      "situation": "Bought headphones eight months ago and the left side has gone quiet, and wants them fixed or replaced.",
+      "mood": "reasonable but firm, expects them to last longer than this",
+      "facts": [
+        "bought them in January, still has the email",
+        "the left cup cuts out after about ten minutes",
+        "no drops, no water, kept in the case",
+        "would rather post them off than go anywhere"
+      ]
+    },
+    {
+      "id": "p23",
+      "situation": "Was given a gift card at Christmas, has no idea what is left on it, and wants to put it towards something today.",
+      "mood": "cheerful, in no particular hurry",
+      "facts": [
+        "the card is a plastic one with a scratch panel on the back",
+        "thinks it was for either 50 or 100",
+        "has bought two things with it already",
+        "wants a desk lamp with the rest"
+      ]
+    },
+    {
+      "id": "p24",
+      "situation": "Saw the same item cheaper somewhere else the day after buying it and wants the difference back.",
+      "mood": "matter-of-fact, has a screenshot ready",
+      "facts": [
+        "paid 149 on 28 August",
+        "saw it for 119 at a large chain the next morning",
+        "has a photo of the other shop's page with the date on it",
+        "was also sent a code by email that they never used"
+      ]
+    },
+    {
+      "id": "p25",
+      "situation": "Wrote a long, careful write-up of a product a week ago and it has never appeared on the site.",
+      "mood": "suspicious that only glowing ones get published",
+      "facts": [
+        "gave it three out of five, not one",
+        "wrote about 200 words",
+        "did buy the item from here",
+        "another one they wrote last year went up within a day"
+      ]
+    },
+    {
+      "id": "p26",
+      "situation": "Had a basket full of things ready to buy on a phone that died, and cannot find any of it now.",
+      "mood": "frustrated, does not want to hunt for it all again",
+      "facts": [
+        "about five or six things in it",
+        "was on the phone app, now on a laptop",
+        "one of the items was a birthday present for the weekend",
+        "had also starred a few other things months ago"
+      ]
+    },
+    {
+      "id": "p27",
+      "situation": "Needs something today rather than in three days and would rather drive somewhere and pick it up.",
+      "mood": "in a hurry, on a lunch break",
+      "facts": [
+        "lives at 48104 and works near the river in Detroit",
+        "needs a USB-C cable and a mug for a leaving present",
+        "can travel about 40 miles",
+        "wants to know if anywhere is open late"
+      ]
+    },
+    {
+      "id": "p28",
+      "situation": "Got an email saying someone signed in from abroad and is frightened the account has been taken over.",
+      "mood": "frightened, wants it stopped right now",
+      "facts": [
+        "has not left the state all year",
+        "the email mentioned Lisbon",
+        "uses the same password in a few places, which they know is bad",
+        "there is a card saved on the account"
+      ]
+    },
+    {
+      "id": "p29",
+      "situation": "Getting far too many messages from the company and wants most of them to stop without missing anything about their actual orders.",
+      "mood": "irritated but not angry, wants a simple answer",
+      "facts": [
+        "gets both texts and emails",
+        "counted four in one day last week",
+        "still wants to know when a parcel is coming",
+        "one thing they do want is to hear when a sold-out mug is back"
+      ]
+    },
+    {
+      "id": "p30",
+      "situation": "Wants to send a present to a relative in another country and has no idea what it will cost them at the other end.",
+      "mood": "cautious, has been stung by a surprise bill before",
+      "facts": [
+        "the relative is in Canada, near Toronto",
+        "the present is about 180 dollars worth",
+        "last time the recipient was charged on the doorstep",
+        "the relative asked how much it is in their own money"
+      ]
+    },
+    {
+      "id": "p31",
+      "situation": "Buys for a small design studio and needs a proper written price for 300 of something before their finance person will release the money.",
+      "mood": "professional, working to a deadline",
+      "facts": [
+        "the studio account number is BIZ-4410",
+        "needs 300 cables for an event",
+        "finance will not pay without paperwork with a number on it",
+        "they are on thirty day terms and are nowhere near their limit"
+      ]
+    },
+    {
+      "id": "p32",
+      "situation": "Will not be in when the parcel comes and does not want it left on the step or taken back to a depot.",
+      "mood": "practical, just wants a time that works",
+      "facts": [
+        "out every weekday until half past four",
+        "the parcel is coming Tuesday",
+        "there is nobody next door to take it",
+        "could do an evening or the following Monday"
+      ]
+    }
+  ]
+}

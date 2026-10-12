@@ -1,0 +1,102 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    name: Build sdist & wheel + smoke test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v7
+      - name: Verify tag matches pyproject.toml version
+        env:
+          TAG_NAME: ${{ github.ref_name }}
+        run: |
+          python3 -c '
+          import os, tomllib
+          tag = os.environ["TAG_NAME"]
+          ver = tomllib.load(open("pyproject.toml", "rb"))["project"]["version"]
+          expected = f"v{ver}"
+          if tag != expected:
+              raise SystemExit(f"Tag {tag!r} does not match pyproject.toml version {expected!r}")
+          print(f"Verified tag {tag} == pyproject.toml version {ver}")
+          '
+      - name: Build distribution
+        run: uv build
+      - name: Smoke test wheel & PyPI metadata in clean venv
+        run: |
+          uv venv /tmp/smoke-venv
+          uv pip install --python /tmp/smoke-venv/bin/python dist/*.whl
+          /tmp/smoke-venv/bin/python -c "
+          import importlib.metadata, re, adk_smart_router
+          from adk_smart_router import SmartRouterPlugin, RouterConfig, ToolJudge, load_config
+          desc = importlib.metadata.metadata('adk-smart-router')['Description']
+          rel = re.findall(r'\]\((?!https?://|#|mailto:)([^)]+)\)', desc)
+          assert not rel, f'Relative links found in PyPI Description metadata: {rel}'
+          print('Smoke test & PyPI metadata check passed:', adk_smart_router.__version__, adk_smart_router.__all__)
+          "
+          /tmp/smoke-venv/bin/smart-router --help >/dev/null
+      - uses: actions/upload-artifact@v7
+        with:
+          name: dist
+          path: dist/
+
+  publish-testpypi:
+    name: Publish to TestPyPI (pre-release tags only)
+    needs: build
+    if: contains(github.ref_name, 'rc')
+    runs-on: ubuntu-latest
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/p/adk-smart-router
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: dist
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+
+  publish-pypi:
+    name: Publish to PyPI (stable tags)
+    needs: build
+    if: "!contains(github.ref_name, 'rc')"
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/adk-smart-router
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: dist
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1
+
+  github-release:
+    name: Create GitHub Release
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v8
+        with:
+          name: dist
+          path: dist/
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "${{ github.ref_name }}" dist/* \
+            --title "${{ github.ref_name }}" \
+            --generate-notes
