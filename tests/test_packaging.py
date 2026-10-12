@@ -5,6 +5,7 @@ from __future__ import annotations
 import ast
 import json
 import re
+import struct
 import tomllib
 from pathlib import Path
 
@@ -95,4 +96,26 @@ def test_readme_relative_links_exist_and_rewrite_cleanly_for_pypi():
     assert (
         "https://github.com/statmike/adk-smart-router/blob/main/docs/operations.md#the-cache-guards"
         in rendered
+    )
+    assert (
+        "https://raw.githubusercontent.com/statmike/adk-smart-router/main/docs/assets/social_card.png"
+        in rendered
+    )
+
+
+def test_social_card_png_and_html():
+    png_path = REPO_ROOT / "docs/assets/social_card.png"
+    html_path = REPO_ROOT / "docs/assets/social_card.html"
+    assets_readme = REPO_ROOT / "docs/assets/README.md"
+
+    assert html_path.is_file(), "Missing docs/assets/social_card.html"
+    assert assets_readme.is_file(), "Missing docs/assets/README.md"
+    assert png_path.is_file(), "Missing docs/assets/social_card.png"
+
+    data = png_path.read_bytes()
+    assert data[:8] == b"\x89PNG\r\n\x1a\n", "docs/assets/social_card.png is not a valid PNG"
+    assert data[12:16] == b"IHDR", "docs/assets/social_card.png missing IHDR chunk"
+    width, height = struct.unpack(">II", data[16:24])
+    assert (width, height) == (1280, 640), (
+        f"docs/assets/social_card.png must be 1280x640, got {width}x{height}"
     )

@@ -8,6 +8,8 @@ Both are aimed at the same problem. An agent with fifty tools sends all fifty de
 model on every turn, whether the user asked about a refund or the weather. The declarations cost
 tokens, and a long menu costs accuracy, because the model has more wrong answers to choose from.
 
+![adk-smart-router overview](docs/assets/social_card.png)
+
 ## Status
 
 It works, and the saving is measured rather than projected.

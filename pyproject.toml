@@ -99,6 +99,7 @@ packages = ["src/adk_smart_router"]
 [tool.hatch.build.targets.sdist]
 exclude = [
     "/.github",
+    "/docs/assets",
     "/examples/reference_agent/corpus",
     "/plugin.json",
     "/skills",
@@ -112,6 +113,10 @@ content-type = "text/markdown"
 
 [[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
 path = "README.md"
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.substitutions]]
+pattern = '!\[([^\]]*)\]\((?!https?://|data:)\.?/?([^)]+)\)'
+replacement = '![\1](https://raw.githubusercontent.com/statmike/adk-smart-router/main/\2)'
 
 [[tool.hatch.metadata.hooks.fancy-pypi-readme.substitutions]]
 pattern = '\]\((?!https?://|#|mailto:)\.?/?([^)]+)\)'

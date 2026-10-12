@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>adk-smart-router — Social Preview Card</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 1280px;
+    height: 640px;
+    overflow: hidden;
+    background: #ffffff;
+    font-family: "Roboto", Arial, sans-serif;
+  }
+  #card {
+    width: 1280px;
+    height: 640px;
+    box-sizing: border-box;
+    padding: 26px 40px 20px;
+    display: flex;
+    flex-direction: column;
+    border-top: 6px solid #4285F4;
+  }
+  .header-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  h1 {
+    margin: 0;
+    font-size: 46px;
+    font-weight: 700;
+    color: #202124;
+    letter-spacing: -0.6px;
+  }
+  .repo-badge {
+    font-family: "Roboto Mono", monospace;
+    font-size: 15px;
+    font-weight: 500;
+    color: #174EA6;
+    background: #E8F0FE;
+    border: 1px solid #AECBFA;
+    border-radius: 6px;
+    padding: 5px 12px;
+  }
+  p.tag {
+    margin: 6px 0 10px;
+    font-size: 20.5px;
+    font-weight: 400;
+    color: #3c4043;
+  }
+  p.stats {
+    margin: 0 0 8px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #1f1f1f;
+    font-family: "Roboto Mono", monospace;
+    background: #F8F9FA;
+    border: 1px solid #DADCE0;
+    border-radius: 6px;
+    padding: 7px 14px;
+    white-space: nowrap;
+  }
+  .mermaid {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+  }
+  .mermaid svg {
+    max-height: 445px;
+    width: 100%;
+  }
+</style>
+</head>
+<body>
+<div id="card">
+  <div class="header-row">
+    <h1>adk-smart-router</h1>
+    <span class="repo-badge">github.com/statmike/adk-smart-router</span>
+  </div>
+  <p class="tag">Predictive semantic tool routing &amp; memoization for Google ADK agents — cache-warm menus, verified in BigQuery.</p>
+  <p class="stats">&minus;22.5% session bill &middot; &minus;49.7% raw prompt tokens &middot; &minus;10.5% latency &middot; 3 judges &middot; 3,179 APIs validated (0.996 recall)</p>
+  <pre class="mermaid">
+flowchart LR
+    IN["ADK Runner Turn<br/>user prompt &middot; session<br/>N tool declarations"] --> GATE["Safety &amp; Experiment Gate<br/>@fail_open &middot; session holdout<br/>prefix lock &middot; cache floor"]
+    GATE --> ROUTER["SmartToolRouter<br/>session-locked decision<br/>savings vs. miss_cost_tokens"]
+    ROUTER --> J1["Description Judge<br/>zero-data cold start"]
+    ROUTER --> J2["Exemplar Judge<br/>k-NN over past turns"]
+    ROUTER --> J3["XGBoost + Archetypes<br/>cache-warm fixed menus"]
+    ROUTER --> MEMO["Tool Call Cache<br/>session &amp; cross-session TTL"]
+    J1 --> OUT["Gemini Call &amp; BQAA Ledger<br/>pruned menu &middot; warm prefix<br/>live A/B &amp; auto-tuner"]
+    J2 --> OUT
+    J3 --> OUT
+    MEMO --> OUT
+    classDef data fill:#E8F0FE,stroke:#4285F4,stroke-width:2px,color:#174EA6
+    classDef config fill:#FEF7E0,stroke:#F9AB00,stroke-width:2px,color:#7A5A00
+    classDef route fill:#FCE8E6,stroke:#EA4335,stroke-width:2px,color:#A50E0E
+    classDef compute fill:#E6F4EA,stroke:#34A853,stroke-width:2px,color:#0D652D
+    class IN,OUT data
+    class GATE config
+    class ROUTER route
+    class J1,J2,J3,MEMO compute
+  </pre>
+</div>
+<script type="module">
+  import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: "base",
+    themeVariables: {
+      fontFamily: "Roboto, Arial, sans-serif",
+      fontSize: "17px",
+      lineColor: "#5f6368"
+    },
+    flowchart: {
+      htmlLabels: true,
+      curve: "basis",
+      nodeSpacing: 22,
+      rankSpacing: 52,
+      padding: 14,
+      wrappingWidth: 280
+    }
+  });
+</script>
+</body>
+</html>
