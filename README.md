@@ -110,7 +110,7 @@ semantically instead of carrying every unseen tool on every menu (`scripts/score
 ```mermaid
 flowchart TD
     PROMPT["Turn 1 User Message"] --> EMBED["Single Gemini Embedding Vector<br/>(768 dims, L2-normalized)"]
-    EMBED --> TIER{"Configured Judges<br/>(SMART_ROUTER_JUDGES)"}
+    EMBED --> TIER(["Configured Judges<br/>(SMART_ROUTER_JUDGES)"])
 
     TIER -- "('prototype',)<br/>Day-Zero Cold Start" --> PROTO["PrototypeJudge<br/>• Embeds live tool docstrings + JSON schemas<br/>• Subtracts catalog mean vector<br/>• Propagates 1-hop Returns → Args graph"]
     TIER -- "('xgboost',)<br/>Trained Booster" --> XGB["XGBoost Predictor<br/>• Loads verified GCS model.ubj<br/>• Scores known training classes"]
@@ -119,6 +119,15 @@ flowchart TD
     PROTO --> PRUNE["pruner.decide + Canonical Menu Snap"]
     XGB --> PRUNE
     HYB --> PRUNE
+
+    classDef data fill:#E8F0FE,stroke:#4285F4,stroke-width:2px,color:#174EA6
+    classDef config fill:#FEF7E0,stroke:#F9AB00,stroke-width:2px,color:#7A5A00
+    classDef compute fill:#E6F4EA,stroke:#34A853,stroke-width:2px,color:#0D652D
+    classDef route fill:#FCE8E6,stroke:#EA4335,stroke-width:2px,color:#A50E0E
+    class PROMPT,EMBED data
+    class TIER config
+    class PROTO,XGB,HYB compute
+    class PRUNE route
 ```
 
 | Surface & Arm | Recall | F8 | Token Efficiency | Complete Sessions | G3 Total Latency |
@@ -179,7 +188,6 @@ trains on. An agent that has been logging for a month can train on that month.
 
 ```mermaid
 sequenceDiagram
-    autonumber
     actor U as User
     participant RUN as ADK Runner
     participant SR as SmartRouterPlugin
@@ -222,6 +230,15 @@ flowchart TD
     TRAIN --> GATE["publish_router.py<br/>convert booster, choose menus, check 5 gates"]
     GATE --> GCS[("Cloud Storage<br/>router artifact")]
     GCS -. "one fetch per process<br/>+ 15m hot-reload poll" .-> SR["SmartRouterPlugin"]
+
+    classDef data fill:#E8F0FE,stroke:#4285F4,stroke-width:2px,color:#174EA6
+    classDef compute fill:#E6F4EA,stroke:#34A853,stroke-width:2px,color:#0D652D
+    classDef config fill:#FEF7E0,stroke:#F9AB00,stroke-width:2px,color:#7A5A00
+    classDef route fill:#FCE8E6,stroke:#EA4335,stroke-width:2px,color:#A50E0E
+    class BQ,GCS data
+    class TRAIN compute
+    class GATE config
+    class SR route
 ```
 
 Plugin order is load-bearing rather than stylistic. An ADK plugin is an object with up to fourteen

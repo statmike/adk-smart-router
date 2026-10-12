@@ -131,7 +131,9 @@ desc = meta["Description"]
 assert desc and len(desc) > 1000, "PyPI Description metadata is missing or truncated"
 rel_links = re.findall(r"\]\((?!https?://|#|mailto:)([^)]+)\)", desc)
 assert not rel_links, f"un-rewritten relative links in PyPI Description: {rel_links}"
+assert "```mermaid" not in desc, "un-substituted ```mermaid block in PyPI Description"
 assert "https://github.com/statmike/adk-smart-router/blob/main/docs/evidence.md" in desc
+assert "https://raw.githubusercontent.com/statmike/adk-smart-router/main/docs/assets/readme_judge_tiers.png" in desc
 
 sdist_path = sys.argv[1]
 sdist_bytes = os.path.getsize(sdist_path)

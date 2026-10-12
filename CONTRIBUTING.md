@@ -80,14 +80,14 @@ Update the version string in all four single-sourced/tripwired locations (enforc
 Add or update the corresponding `## [X.Y.Z] - YYYY-MM-DD` section in [`CHANGELOG.md`](CHANGELOG.md), then run the full local gate (`uv run ruff format --check . && uv run ruff check . && uv run mypy && uv run pytest -q && ./scripts/check_install.sh`) and merge via pull request to `main`.
 
 ### 2. Pre-release verification on TestPyPI (`vX.Y.ZrcN`)
-Before cutting a new major or minor release on production PyPI (where version numbers cannot be reused or edited), validate the build and OIDC pipeline with a release candidate tag:
-1. Set version to `X.Y.Zrc1` across the four files above, commit, and push tag `vX.Y.Zrc1`:
+Before cutting a new major or minor release on production PyPI (where version numbers cannot be reused or edited), validate the build and OIDC pipeline with a release candidate tag directly on `main` (zero version-bump commits required):
+1. Push an annotated `vX.Y.Zrc1` tag on the `main` commit whose `pyproject.toml` is at `X.Y.Z`:
    ```bash
    git tag -a vX.Y.Zrc1 -m "Release candidate vX.Y.Zrc1"
    git push origin vX.Y.Zrc1
    ```
-2. Any tag containing `rc` routes automatically to the `publish-testpypi` job (`testpypi` environment).
-3. Verify the published package in an isolated environment from TestPyPI:
+2. `.github/workflows/release.yml` verifies `vX.Y.Zrc1` matches base version `X.Y.Z`, stamps `X.Y.Zrc1` into the build environment, and routes the tag automatically to the `publish-testpypi` job (`testpypi` environment).
+3. Verify the published package in an isolated environment from TestPyPI and inspect the rendered project page on `https://test.pypi.org/project/adk-smart-router/X.Y.Zrc1/`:
    ```bash
    uvx --index-url https://test.pypi.org/simple/ \
        --extra-index-url https://pypi.org/simple/ \
@@ -96,12 +96,12 @@ Before cutting a new major or minor release on production PyPI (where version nu
    ```
 
 ### 3. Production release on PyPI (`vX.Y.Z`)
-1. Set version to `X.Y.Z`, commit to `main`, and push an annotated tag:
+1. Push the final annotated `vX.Y.Z` tag on the same `main` commit:
    ```bash
    git tag -a vX.Y.Z -m "Release vX.Y.Z"
    git push origin vX.Y.Z
    ```
-2. Non-`rc` tags route to `publish-pypi` (`pypi` environment) and `github-release` (attaching the `.whl` and `.tar.gz` distributions).
+2. Non-`rc` tags route to `publish-pypi` (`pypi` environment) and then `github-release` (attaching the `.whl` and `.tar.gz` distributions).
 3. Verify the live PyPI release:
    ```bash
    uvx --from adk-smart-router==X.Y.Z smart-router --help
@@ -110,8 +110,8 @@ Before cutting a new major or minor release on production PyPI (where version nu
 ### 4. Patch / hotfix releases & CI enforcement
 - For patch releases (`X.Y.Z+1`), branch from `main` (or from the `vX.Y.Z` tag if `main` has diverged with next-minor work), cherry-pick the fix, bump the patch version and `CHANGELOG.md`, and tag `vX.Y.Z+1`.
 - **What CI refuses automatically:**
-  - `tests/test_packaging.py` fails if `pyproject.toml`, `src/adk_smart_router/__init__.py`, `plugin.json`, `skills/adk-smart-router/SKILL.md`, or `CHANGELOG.md` disagree on the version, if the built PyPI `Description` contains any un-rewritten relative links, or if the `sdist` includes excluded development artifacts.
-  - `.github/workflows/release.yml` refuses to build or publish if the pushed git tag (`v<version>`) does not match `pyproject.toml` `[project].version`.
+  - `tests/test_packaging.py` fails if `pyproject.toml`, `src/adk_smart_router/__init__.py`, `plugin.json`, `skills/adk-smart-router/SKILL.md`, or `CHANGELOG.md` disagree on the version, if the built PyPI `Description` contains any un-rewritten relative links or un-substituted ` ```mermaid ` blocks, or if the `sdist` includes excluded development artifacts.
+  - `.github/workflows/release.yml` refuses to build or publish if the pushed git tag (`v<version>` or `v<version>rcN`) does not match `pyproject.toml` `[project].version`.
 
 ## License
 

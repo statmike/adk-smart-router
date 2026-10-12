@@ -5,6 +5,9 @@ on:
     tags:
       - 'v*'
 
+permissions:
+  contents: read
+
 jobs:
   build:
     name: Build sdist & wheel + smoke test
@@ -12,31 +15,43 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@v7
-      - name: Verify tag matches pyproject.toml version
+      - name: Verify tag matches pyproject.toml version (exact or rc suffix)
         env:
           TAG_NAME: ${{ github.ref_name }}
         run: |
           python3 -c '
-          import os, tomllib
+          import os, pathlib, re, subprocess, tomllib
           tag = os.environ["TAG_NAME"]
           ver = tomllib.load(open("pyproject.toml", "rb"))["project"]["version"]
-          expected = f"v{ver}"
-          if tag != expected:
-              raise SystemExit(f"Tag {tag!r} does not match pyproject.toml version {expected!r}")
-          print(f"Verified tag {tag} == pyproject.toml version {ver}")
+          base_tag = f"v{ver}"
+          if tag == base_tag:
+              print(f"Exact release tag match: {tag} == pyproject.toml {ver}")
+          elif re.fullmatch(rf"{re.escape(base_tag)}rc[0-9]+", tag):
+              rc_ver = tag.lstrip("v")
+              print(f"Release-candidate tag {tag} for base {base_tag}; stamping {rc_ver} for build")
+              subprocess.run(["uv", "version", rc_ver, "--no-sync"], check=True)
+              init_p = pathlib.Path("src/adk_smart_router/__init__.py")
+              init_p.write_text(init_p.read_text().replace(f"\"{ver}\"", f"\"{rc_ver}\""))
+          else:
+              raise SystemExit(f"Tag {tag!r} does not match pyproject.toml version {base_tag!r} (or {base_tag}rcN)")
           '
       - name: Build distribution
         run: uv build
       - name: Smoke test wheel & PyPI metadata in clean venv
+        env:
+          TAG_NAME: ${{ github.ref_name }}
         run: |
           uv venv /tmp/smoke-venv
           uv pip install --python /tmp/smoke-venv/bin/python dist/*.whl
           /tmp/smoke-venv/bin/python -c "
-          import importlib.metadata, re, adk_smart_router
+          import importlib.metadata, os, re, adk_smart_router
           from adk_smart_router import SmartRouterPlugin, RouterConfig, ToolJudge, load_config
+          expected = os.environ['TAG_NAME'].lstrip('v')
+          assert adk_smart_router.__version__ == expected, f'{adk_smart_router.__version__!r} != {expected!r}'
           desc = importlib.metadata.metadata('adk-smart-router')['Description']
           rel = re.findall(r'\]\((?!https?://|#|mailto:)([^)]+)\)', desc)
           assert not rel, f'Relative links found in PyPI Description metadata: {rel}'
+          assert '\`\`\`mermaid' not in desc, 'Un-substituted mermaid block found in PyPI Description metadata'
           print('Smoke test & PyPI metadata check passed:', adk_smart_router.__version__, adk_smart_router.__all__)
           "
           /tmp/smoke-venv/bin/smart-router --help >/dev/null
@@ -83,7 +98,8 @@ jobs:
 
   github-release:
     name: Create GitHub Release
-    needs: build
+    needs: publish-pypi
+    if: "!contains(github.ref_name, 'rc')"
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -98,5 +114,6 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release create "${{ github.ref_name }}" dist/* \
+            --verify-tag \
             --title "${{ github.ref_name }}" \
             --generate-notes

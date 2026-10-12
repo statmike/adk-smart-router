@@ -106,13 +106,26 @@ exclude = [
     "/uv.lock",
 ]
 
-# Rewrite relative repository links in README.md to absolute GitHub URLs in the
-# built wheel/sdist metadata so every link on the PyPI project page resolves.
+# Rewrite relative repository links and Mermaid blocks in README.md to absolute
+# GitHub URLs / pre-rendered PNGs in the built wheel/sdist metadata so every link
+# and diagram on the PyPI project page renders cleanly.
 [tool.hatch.metadata.hooks.fancy-pypi-readme]
 content-type = "text/markdown"
 
 [[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
 path = "README.md"
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.substitutions]]
+pattern = '(?s)```mermaid\nflowchart TD\n    PROMPT\["Turn 1 User Message"\].*?```'
+replacement = '![Judge tiers: PrototypeJudge, XGBoost, and Hybrid](https://raw.githubusercontent.com/statmike/adk-smart-router/main/docs/assets/readme_judge_tiers.png)'
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.substitutions]]
+pattern = '(?s)```mermaid\nsequenceDiagram\n.*?```'
+replacement = '![One turn through SmartRouterPlugin and BigQueryAgentAnalyticsPlugin](https://raw.githubusercontent.com/statmike/adk-smart-router/main/docs/assets/readme_turn_sequence.png)'
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.substitutions]]
+pattern = '(?s)```mermaid\nflowchart TD\n    BQ\[\("BigQuery.*?```'
+replacement = '![Offline training and artifact promotion loop](https://raw.githubusercontent.com/statmike/adk-smart-router/main/docs/assets/readme_training_loop.png)'
 
 [[tool.hatch.metadata.hooks.fancy-pypi-readme.substitutions]]
 pattern = '!\[([^\]]*)\]\((?!https?://|data:)\.?/?([^)]+)\)'
