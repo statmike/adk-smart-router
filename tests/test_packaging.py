@@ -62,6 +62,13 @@ def test_version_parity_across_pyproject_init_plugin_skill_and_changelog():
     )
 
     base_version = re.sub(r"(?:rc|a|b)\d+$", "", expected)
+    citation_text = (REPO_ROOT / "CITATION.cff").read_text(encoding="utf-8")
+    citation_match = re.search(r'^version:\s*"([^"]+)"', citation_text, re.MULTILINE)
+    assert citation_match is not None, "No version field in CITATION.cff"
+    assert citation_match.group(1) in {expected, base_version}, (
+        f"CITATION.cff version {citation_match.group(1)!r} != pyproject.toml {expected!r}"
+    )
+
     changelog = (REPO_ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
     assert f"## [{expected}]" in changelog or f"## [{base_version}]" in changelog, (
         f"CHANGELOG.md has no ## [{expected}] or ## [{base_version}] heading"

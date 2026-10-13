@@ -85,11 +85,12 @@ Version increments map directly to the public contract in `src/adk_smart_router/
   - Adding model-family cache-floor entries to `MIN_CACHE_TOKENS`, or updating PyPI/GitHub documentation (`README.md`, `docs/`) and Agent Plugin skill metadata (`plugin.json`, `skills/adk-smart-router/SKILL.md`).
 
 ### 1. Version bump & changelog
-Update the version string in all four single-sourced/tripwired locations (enforced by `tests/test_packaging.py`):
+Update the version string in all five single-sourced/tripwired locations (enforced by `tests/test_packaging.py`):
 1. `pyproject.toml` (`[project].version`)
 2. `src/adk_smart_router/__init__.py` (`PackageNotFoundError` fallback literal)
 3. `plugin.json` (`"version"`)
 4. `skills/adk-smart-router/SKILL.md` (`metadata.version`)
+5. `CITATION.cff` (`version`)
 
 Add or update the corresponding `## [X.Y.Z] - YYYY-MM-DD` section in [`CHANGELOG.md`](CHANGELOG.md), then run the full local gate (`uv run ruff format --check . && uv run ruff check . && uv run mypy && uv run pytest -q && ./scripts/check_install.sh`) and merge via pull request to `main`.
 

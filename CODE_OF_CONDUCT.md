@@ -45,6 +45,7 @@ promptly and fairly.
 
 ## Attribution
 
-This Code of Conduct is adapted from the [Contributor Covenant](https://www.contributor-covenant.org),
+This project follows [Google's Open Source Community Guidelines](https://opensource.google/conduct/).
+This Code of Conduct is also adapted from the [Contributor Covenant](https://www.contributor-covenant.org),
 version 2.1, available at
 [https://www.contributor-covenant.org/version/2/1/code_of_conduct.html](https://www.contributor-covenant.org/version/2/1/code_of_conduct.html).
