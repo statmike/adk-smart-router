@@ -78,7 +78,7 @@ Before wiring `SmartRouterPlugin`, inspect the agent's tool functions:
 3. `BigQueryAgentAnalyticsPlugin` **must** include `custom_metadata_allowlist=["smart_router"]`.
 
 ### 3.2 Complete Wiring Pattern (including Startup `warmup`)
-Always call `await plugin.warmup(app)` during service startup (e.g., FastAPI `lifespan` or before starting the runner loop). `warmup(app)` pays the ~1.9s cold-start connection cost of the Vertex AI `gemini-embedding-2` client and pre-embeds all tool prototypes once before user traffic arrives, preventing Turn 1 of the first live session from hitting the `600 ms` hot-path embedding timeout:
+Always call `await plugin.warmup(app)` during service startup (e.g., FastAPI `lifespan` or before starting the runner loop). `warmup(app)` pays the ~1.9s cold-start connection cost of the Gemini Enterprise `gemini-embedding-2` client and pre-embeds all tool prototypes once before user traffic arrives, preventing Turn 1 of the first live session from hitting the `600 ms` hot-path embedding timeout:
 
 ```python
 from google.adk.agents import LlmAgent

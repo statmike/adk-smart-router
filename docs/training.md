@@ -684,8 +684,8 @@ against a boosted-tree `CREATE MODEL` at all, which is worth stating because the
 to assume from the documentation: `BOOSTED_TREE_CLASSIFIER` is an EXTERNAL model type, and EXTERNAL
 model types are usually the ones that bill outside BigQuery. This one does not.
 
-Embedding is charged separately, on [Gemini Enterprise Agent
-Platform](https://cloud.google.com/gemini-enterprise-agent-platform/generative-ai/pricing), and is
+Embedding is charged separately, on [Gemini
+Enterprise](https://cloud.google.com/gemini-enterprise-agent-platform/generative-ai/pricing), and is
 incremental. `train_router` only embeds rows
 that have no vector yet, so the first run over a back catalogue is a one-time cost proportional
 to the corpus and every run after it pays only for new traffic. That is why the number above is

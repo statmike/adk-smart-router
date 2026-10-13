@@ -79,7 +79,7 @@ safety tool alive in hybrid mode—list safety-critical tools explicitly in `nev
 - **Dynamic docstring churn:** If a remote MCP server injects per-turn dynamic text into tool
   descriptions, `PrototypeJudge` bounds its canonical menu cache to a single entry per `agent_name`
   and caps description-only index rebuilds at `_MAX_INDEX_REBUILDS_PER_AGENT` (4) so dynamic
-  docstrings cannot leak memory or trigger unbounded Vertex Embedding API calls.
+  docstrings cannot leak memory or trigger unbounded Gemini Enterprise Embedding API calls.
 - **Instruction/data separation in `LiveLlmJudge`:** When `llm_live` is enabled, the catalog and
   routing instructions are passed via `GenerateContentConfig(system_instruction=...)`, tool
   descriptions are truncated to `_LLM_JUDGE_MAX_DESC_CHARS` (240 chars), the untrusted user prompt

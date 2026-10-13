@@ -41,8 +41,8 @@ Anything unset or unparseable falls back to the dataclass default rather than ra
 malformed config value must not take down serving.
 
 `SMART_ROUTER_VERTEX_LOCATION` keeps its name because the field does. It is the region the
-embedding endpoint is called in, on what is now [Gemini Enterprise Agent
-Platform](https://docs.cloud.google.com/gemini-enterprise-agent-platform/vertex-ai-name-changes).
+embedding endpoint is called in, on what is now [Gemini
+Enterprise](https://docs.cloud.google.com/gemini-enterprise-agent-platform/vertex-ai-name-changes).
 
 ## Warming up at startup
 

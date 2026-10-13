@@ -100,8 +100,8 @@ because nothing is cached yet and every list costs the same; after it, a differe
 prefix at full price. This runs before the embedding call, so a session that can no longer apply a
 decision stops paying to make one. See *The moment the decision is free* below.
 
-**8. Embed.** The latest user text goes to `gemini-embedding-2` through [Gemini Enterprise Agent
-Platform](https://docs.cloud.google.com/gemini-enterprise-agent-platform/vertex-ai-name-changes),
+**8. Embed.** The latest user text goes to `gemini-embedding-2` through [Gemini
+Enterprise](https://docs.cloud.google.com/gemini-enterprise-agent-platform/vertex-ai-name-changes),
 the platform formerly called Vertex AI. On timeout,
 open circuit breaker, malformed response or wrong dimensionality, the embedder returns `None` and
 the session is pinned to passthrough for good. A per-turn retry would produce mid-session cache

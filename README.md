@@ -36,8 +36,8 @@ number of distinct tools, and sent the same share of calls into the long tail. A
 tools people needed would show up as a shorter tail, and it does not.
 
 **Read −22.5% as a floor.** Raw prompt tokens fell 49.7%, and the whole gap between that and the
-bill is the cache. [Gemini Enterprise Agent
-Platform](https://cloud.google.com/gemini-enterprise-agent-platform/generative-ai/pricing) charges
+bill is the cache. [Gemini
+Enterprise](https://cloud.google.com/gemini-enterprise-agent-platform/generative-ai/pricing) charges
 a tenth as much for a [cached input
 token](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/context-cache/context-cache-overview),
 so the declarations the router removes were already nearly free: you save a tenth of what you remove, and only while
@@ -167,7 +167,7 @@ arm so the comparison keeps running after rollout.
 [docs/evidence.md](docs/evidence.md) is this section on one page, with the script and the write-up
 behind every number in a table at the end.
 
-Training needs a corpus, [BigQuery](https://cloud.google.com/bigquery), and an Agent Platform
+Training needs a corpus, [BigQuery](https://cloud.google.com/bigquery), and a Gemini Enterprise
 embedding model, and generating a corpus costs real money. See [docs/training.md](docs/training.md) for what that involves. The plugin ships with
 `mode` at `"off"` and `route_fraction` at `0.0`, so installing it changes nothing until you turn
 it on, and a built-in guard refuses to prune on any agent whose prompts are too small for pruning
@@ -481,7 +481,7 @@ are exposed as environment variables specifically so you can flip the router off
 | `src/adk_smart_router/` | The package. One capability per file. |
 | `src/adk_smart_router/sql/` | The BigQuery pipeline: preflight, training, backtest, TTL report, dashboard views. |
 | `examples/reference_agent/` | A 100-tool customer support agent used to generate the corpus. |
-| `examples/deployed_support/` | The same agent as a deployable agent folder, so the Agent Platform path can be run rather than described. |
+| `examples/deployed_support/` | The same agent as a deployable agent folder, so the Gemini Enterprise path can be run rather than described. |
 | `examples/xlam_agent/` | External-validity benchmark agent (`scripts/build_xlam_agent.py --fetch` downloads `Salesforce/xlam-function-calling-60k` on demand from Hugging Face). |
 | `examples/tiny_agent/` | A two-tool agent, there so the install check has something to point at. |
 | `scripts/` | Provisioning, corpus generation, the probes, the cost model, the settings tuner. Not shipped in the wheel; the GCP side is a clone. |
@@ -619,7 +619,7 @@ in CI on every push.
 | **Evaluate fit & savings** | [docs/evidence.md](docs/evidence.md) | Every measured claim on one page: what was measured, what it cost, what it does not show, and which script reproduces each number. |
 | **Evaluate fit & savings** | [docs/scenarios.md](docs/scenarios.md) | The book of agent shapes: which ones this helps, which ones it loses money on, and how to tell which one you have. |
 | **Install & qualify** | [docs/install.md](docs/install.md) | The front door: `qualify`, `readiness`, wiring the plugin, `doctor`, and `check-arguments`. |
-| **Deploy** | [docs/deploying.md](docs/deploying.md) | Local, Cloud Run, and Agent Platform (`adk deploy agent_engine`): serving dependencies, memory footprint, and `examples/deployed_support`. |
+| **Deploy** | [docs/deploying.md](docs/deploying.md) | Local, Cloud Run, and Gemini Enterprise (`adk deploy agent_engine`): serving dependencies, memory footprint, and `examples/deployed_support`. |
 | **Train & publish** | [docs/training.md](docs/training.md) | Preflight gates, corpus generation, the BigQuery ML pipeline, pool tuning (`tune_settings.py`), and publishing a model (`publish_router.py`). |
 | **Operate & monitor** | [docs/operations.md](docs/operations.md) | Rollout ramp, cache guards, the kill switch, autonomous daily retraining/rollback (`run_cycle.sh`, `watch_generations.py`), and what to watch. |
 | **Operate & monitor** | [docs/observability.md](docs/observability.md) | How the router records its own history (`router_lifecycle`), drift detection (`check_drift.py`), and `smart-router status`. |
