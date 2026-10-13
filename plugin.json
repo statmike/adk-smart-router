@@ -21,7 +21,7 @@
     "xgboost"
   ],
   "ownership": {
-    "team": "Google Cloud AI",
+    "team": "cloud-gtm/agentic-data-science",
     "poc": "statmike"
   }
 }

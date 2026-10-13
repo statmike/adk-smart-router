@@ -349,19 +349,26 @@ uv run pytest
 
 ## Using it
 
-Install the plugin on your `App`, ahead of any analytics plugin:
+Install the plugin on your `App`, ahead of ADK's [BigQuery Agent Analytics plugin](https://adk.dev/integrations/bigquery-agent-analytics/):
 
 ```python
-from google.adk.apps import App
 from google.adk.agents import LlmAgent
+from google.adk.agents.context_cache_config import ContextCacheConfig
+from google.adk.apps import App
+from google.adk.plugins.bigquery_agent_analytics_plugin import BigQueryAgentAnalyticsPlugin
 from adk_smart_router import SmartRouterPlugin, load_config
 
 app = App(
     name="support",
     root_agent=LlmAgent(name="support", model="gemini-2.5-flash", tools=ALL_TOOLS),
+    context_cache_config=ContextCacheConfig(min_tokens=2048, ttl_seconds=1800),
     plugins=[
         SmartRouterPlugin(load_config()),
-        # your analytics plugin goes after the router, never before it
+        BigQueryAgentAnalyticsPlugin(
+            project_id="my-gcp-project",
+            dataset_id="smart_router",
+            custom_metadata_allowlist=["smart_router"],
+        ),
     ],
 )
 ```

@@ -113,6 +113,21 @@ Before cutting a new major or minor release on production PyPI (where version nu
   - `tests/test_packaging.py` fails if `pyproject.toml`, `src/adk_smart_router/__init__.py`, `plugin.json`, `skills/adk-smart-router/SKILL.md`, or `CHANGELOG.md` disagree on the version, if the built PyPI `Description` contains any un-rewritten relative links or un-substituted ` ```mermaid ` blocks, or if the `sdist` includes excluded development artifacts.
   - `.github/workflows/release.yml` refuses to build or publish if the pushed git tag (`v<version>` or `v<version>rcN`) does not match `pyproject.toml` `[project].version`.
 
+## Contributor License Agreement
+
+Contributions to this project must be accompanied by a
+[Contributor License Agreement](https://cla.developers.google.com/about) (CLA). You (or your
+employer) retain the copyright to your contribution; this simply gives permission to use and
+redistribute your contributions as part of the project.
+
+If you have not already done so, please complete your CLA at
+<https://cla.developers.google.com/> before submitting a pull request.
+
+## Community guidelines
+
+This project follows
+[Google's Open Source Community Guidelines](https://opensource.google/conduct/).
+
 ## License
 
 By contributing to `adk-smart-router`, you agree that your contributions will be licensed under the
