@@ -70,6 +70,20 @@ Explain *why*, not *what*. The diff already says what.
 
 Releases are published to TestPyPI and PyPI via GitHub Actions OIDC Trusted Publishing ([`.github/workflows/release.yml`](.github/workflows/release.yml)) whenever a `v*` tag is pushed.
 
+### Semantic versioning (`X.Y.Z`)
+Version increments map directly to the public contract in `src/adk_smart_router/`:
+
+- **Major (`X.0.0`) — Breaking changes to the public contract:**
+  - Removing or incompatibly changing any exported symbol in `adk_smart_router.__all__` (`SmartRouterPlugin`, `RouterConfig`, `ToolJudge`, `load_config`).
+  - Removing, renaming, or changing the semantics of an existing `RouterConfig` field, `SMART_ROUTER_*` environment variable, or `smart-router` CLI subcommand (`qualify`, `readiness`, `doctor`, `check-arguments`, `status`).
+  - Breaking the GCS model artifact contract (`model.ubj` + `metadata.json` validated by `model_store.py`) or the BigQuery provenance schema (`event.custom_metadata["smart_router"]` and `DECISION_SOURCES` in `provenance.py`).
+- **Minor (`X.Y.0`) — Backwards-compatible features:**
+  - Adding a new built-in judge tier in `judges.py`, a new `smart-router` CLI subcommand or option, or a new `RouterConfig` field with a backwards-compatible default.
+  - Adding new BigQuery reporting views or SQL procedures in `src/adk_smart_router/sql/` without breaking existing tables.
+- **Patch (`X.Y.Z`) — Backwards-compatible fixes, operational wiring, and documentation:**
+  - Bug fixes, guard threshold refinements, or exposing an existing `RouterConfig` field via `load_config()` environment variables.
+  - Adding model-family cache-floor entries to `MIN_CACHE_TOKENS`, or updating PyPI/GitHub documentation (`README.md`, `docs/`) and Agent Plugin skill metadata (`plugin.json`, `skills/adk-smart-router/SKILL.md`).
+
 ### 1. Version bump & changelog
 Update the version string in all four single-sourced/tripwired locations (enforced by `tests/test_packaging.py`):
 1. `pyproject.toml` (`[project].version`)

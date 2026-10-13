@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "adk-smart-router"
-version = "1.0.0"
+version = "1.0.1"
 description = "A predictive semantic router for Google ADK agents: prune the tool menu once per session, and skip tool calls whose answer is already known."
 dynamic = ["readme"]
 requires-python = ">=3.11"

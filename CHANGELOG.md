@@ -5,6 +5,17 @@ All notable changes to `adk-smart-router` are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2026-10-13
+
+### Added
+- **Environment-driven model governance (`load_config()` and `MIN_CACHE_TOKENS`):**
+  - `load_config()` now reads `SMART_ROUTER_EMBEDDING_MODEL`, `SMART_ROUTER_EMBEDDING_DIMS`, and `SMART_ROUTER_LLM_JUDGE_MODEL` from environment variables so deployments in model-governed Gemini Enterprise environments (`constraints/vertexai.allowedModels`) can pin approved embedding and judge model IDs without code changes.
+  - Added `"gemini-flash-latest"` and `"gemini-pro-latest"` (`4096` tokens) to `MIN_CACHE_TOKENS`.
+- **Documentation & ADK ecosystem metadata:**
+  - Updated `README.md` (`## Using it`) to demonstrate wiring `SmartRouterPlugin` alongside `BigQueryAgentAnalyticsPlugin(..., custom_metadata_allowlist=["smart_router"])` and `ContextCacheConfig`.
+  - Updated platform terminology across documentation and `skills/adk-smart-router/SKILL.md` to **Gemini Enterprise** and aligned `plugin.json` ownership metadata (`cloud-gtm/agentic-data-science`).
+  - Added Google Contributor License Agreement and Community Guidelines sections to `CONTRIBUTING.md`.
+
 ## [1.0.0] - 2026-10-12
 
 ### Added

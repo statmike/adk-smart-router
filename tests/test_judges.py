@@ -30,7 +30,7 @@ from google.adk.tools.base_tool import BaseTool
 from google.genai import types
 
 from adk_smart_router import plugin as plugin_mod
-from adk_smart_router.config import RouterConfig, load_config
+from adk_smart_router.config import RouterConfig, load_config, min_cache_tokens
 from adk_smart_router.judges import (
     LiveLlmJudge,
     PrototypeJudge,
@@ -279,9 +279,17 @@ def test_config_loads_judges_and_prototype_weight_from_env(
 ) -> None:
     monkeypatch.setenv("SMART_ROUTER_JUDGES", "xgboost, prototype")
     monkeypatch.setenv("SMART_ROUTER_PROTOTYPE_WEIGHT", "0.22")
+    monkeypatch.setenv("SMART_ROUTER_EMBEDDING_MODEL", "gemini-embedding-001")
+    monkeypatch.setenv("SMART_ROUTER_EMBEDDING_DIMS", "768")
+    monkeypatch.setenv("SMART_ROUTER_LLM_JUDGE_MODEL", "gemini-3.5-flash-lite")
     cfg = load_config()
     assert cfg.judges == ("xgboost", "prototype")
     assert cfg.prototype_weight == pytest.approx(0.22)
+    assert cfg.embedding_model == "gemini-embedding-001"
+    assert cfg.embedding_dims == 768
+    assert cfg.llm_judge_model == "gemini-3.5-flash-lite"
+    assert min_cache_tokens("gemini-3.7-flash") == 4096
+    assert min_cache_tokens("gemini-flash-latest") == 4096
 
 
 def test_tool_specs_reads_json_schema_and_full_python_docstring() -> None:

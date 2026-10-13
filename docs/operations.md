@@ -29,9 +29,12 @@ operator has to be able to flip the router off or pin a version without a code c
 | `SMART_ROUTER_BQ_PROJECT` | `bq_project` |
 | `SMART_ROUTER_BQ_DATASET` | `bq_dataset` |
 | `SMART_ROUTER_BQ_CONNECTION` | `bq_connection` |
+| `SMART_ROUTER_EMBEDDING_MODEL` | `embedding_model` |
+| `SMART_ROUTER_EMBEDDING_DIMS` | `embedding_dims` |
 | `SMART_ROUTER_VERTEX_LOCATION` | `vertex_location` |
 | `SMART_ROUTER_ENVIRONMENT` | `environment` |
 | `SMART_ROUTER_LOCAL_CACHE_DIR` | `local_cache_dir` |
+| `SMART_ROUTER_LLM_JUDGE_MODEL` | `llm_judge_model` |
 | `SMART_ROUTER_REFRESH_INTERVAL_S` | `refresh_interval_s` |
 | `SMART_ROUTER_JUDGES` | `judges`, comma-separated (`xgboost`, `prototype`, `llm_live`) |
 | `SMART_ROUTER_PROTOTYPE_WEIGHT` | `prototype_weight` |

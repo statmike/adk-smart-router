@@ -9,7 +9,7 @@ description: >-
 metadata:
   author: Mike Henderson
   license: Apache-2.0
-  version: 1.0.0
+  version: 1.0.1
 ---
 
 # `adk-smart-router` Agentic Integration Playbook

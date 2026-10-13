@@ -18,6 +18,6 @@ try:
     # against pyproject.toml in tests/test_packaging.py for zip-staged workers.
     __version__ = version("adk-smart-router")
 except PackageNotFoundError:  # running from a source tree or zip bundle without .dist-info
-    __version__ = "1.0.0"
+    __version__ = "1.0.1"
 
 __all__ = ["RouterConfig", "SmartRouterPlugin", "ToolJudge", "__version__", "load_config"]

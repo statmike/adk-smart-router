@@ -34,7 +34,12 @@ Mode = Literal["off", "active"]
 # and the published number is a lower bound on eligibility, not a guarantee in
 # either direction. `cache_watch.CacheWatch` is what actually decides whether
 # pruning is costing an agent its cache hits (DESIGN.md 18.13).
-MIN_CACHE_TOKENS: Mapping[str, int] = {"gemini-2.5-": 2048, "gemini-3": 4096}
+MIN_CACHE_TOKENS: Mapping[str, int] = {
+    "gemini-2.5-": 2048,
+    "gemini-3": 4096,
+    "gemini-flash-latest": 4096,
+    "gemini-pro-latest": 4096,
+}
 
 # ADK's control plane. Never prunable, never a training label: pruning it
 # silently disables multi-agent delegation, and because the transfer then never
@@ -348,9 +353,12 @@ def load_config(**overrides: object) -> RouterConfig:
     _put_str(env, "bq_project", "SMART_ROUTER_BQ_PROJECT")
     _put_str(env, "bq_dataset", "SMART_ROUTER_BQ_DATASET")
     _put_str(env, "bq_connection", "SMART_ROUTER_BQ_CONNECTION")
+    _put_str(env, "embedding_model", "SMART_ROUTER_EMBEDDING_MODEL")
+    _put_int(env, "embedding_dims", "SMART_ROUTER_EMBEDDING_DIMS")
     _put_str(env, "vertex_location", "SMART_ROUTER_VERTEX_LOCATION")
     _put_str(env, "environment", "SMART_ROUTER_ENVIRONMENT")
     _put_str(env, "local_cache_dir", "SMART_ROUTER_LOCAL_CACHE_DIR")
+    _put_str(env, "llm_judge_model", "SMART_ROUTER_LLM_JUDGE_MODEL")
     _put_float(env, "route_fraction", "SMART_ROUTER_ROUTE_FRACTION")
     _put_float(env, "holdout_fraction", "SMART_ROUTER_HOLDOUT_FRACTION")
     _put_float(env, "refresh_interval_s", "SMART_ROUTER_REFRESH_INTERVAL_S")
