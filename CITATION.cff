@@ -5,6 +5,7 @@ type: software
 authors:
   - given-names: Mike
     family-names: Henderson
+    alias: statmike
 repository-code: "https://github.com/statmike/adk-smart-router"
 url: "https://github.com/statmike/adk-smart-router"
 license: Apache-2.0
