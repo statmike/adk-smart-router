@@ -282,12 +282,12 @@ def test_config_loads_judges_and_prototype_weight_from_env(
     monkeypatch.setenv("SMART_ROUTER_EMBEDDING_MODEL", "gemini-embedding-001")
     monkeypatch.setenv("SMART_ROUTER_EMBEDDING_DIMS", "768")
     monkeypatch.setenv("SMART_ROUTER_LLM_JUDGE_MODEL", "gemini-3.5-flash-lite")
-    cfg = load_config()
-    assert cfg.judges == ("xgboost", "prototype")
-    assert cfg.prototype_weight == pytest.approx(0.22)
-    assert cfg.embedding_model == "gemini-embedding-001"
-    assert cfg.embedding_dims == 768
-    assert cfg.llm_judge_model == "gemini-3.5-flash-lite"
+    router_config = load_config()
+    assert router_config.judges == ("xgboost", "prototype")
+    assert router_config.prototype_weight == pytest.approx(0.22)
+    assert router_config.embedding_model == "gemini-embedding-001"
+    assert router_config.embedding_dims == 768
+    assert router_config.llm_judge_model == "gemini-3.5-flash-lite"
     assert min_cache_tokens("gemini-3.7-flash") == 4096
     assert min_cache_tokens("gemini-flash-latest") == 4096
 
