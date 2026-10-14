@@ -14,6 +14,7 @@ flowchart LR
 | File | Responsibility |
 | :--- | :--- |
 | [`README.md`](./README.md) | Directory map and regeneration instructions for static visual assets. |
+| [`smart-router.svg`](./smart-router.svg) / [`smart-router.png`](./smart-router.png) | 512×512 canonical project icon (active session-locked route in `#4f46e5` indigo, locked menu node in `#0d9488` teal, and pruned branches in `#64748b` slate). |
 | [`social_card.html`](./social_card.html) / [`social_card.png`](./social_card.png) | 1280×640 repository social preview card using the four-class palette (`data`, `config`, `route`, `compute`). |
 | [`readme_judge_tiers.html`](./readme_judge_tiers.html) / [`readme_judge_tiers.png`](./readme_judge_tiers.png) | 1060×410 PyPI fallback PNG for the `README.md` judge tiers diagram (`PrototypeJudge`, `XGBoost`, and Hybrid). |
 | [`readme_turn_sequence.html`](./readme_turn_sequence.html) / [`readme_turn_sequence.png`](./readme_turn_sequence.png) | 1120×660 PyPI fallback PNG for the `README.md` per-turn `SmartRouterPlugin` + `BigQueryAgentAnalyticsPlugin` sequence diagram. |
@@ -25,6 +26,7 @@ From the repository root:
 
 ```bash
 DIR="$(pwd)/docs/assets"
+google-chrome --headless=new --disable-gpu --hide-scrollbars --default-background-color=00000000 --window-size=512,512 --screenshot="$DIR/smart-router.png" "file://$DIR/smart-router.svg"
 google-chrome --headless=new --disable-gpu --hide-scrollbars --window-size=1280,640 --virtual-time-budget=8000 --screenshot="$DIR/social_card.png" "file://$DIR/social_card.html"
 google-chrome --headless=new --disable-gpu --hide-scrollbars --window-size=1060,410 --virtual-time-budget=8000 --screenshot="$DIR/readme_judge_tiers.png" "file://$DIR/readme_judge_tiers.html"
 google-chrome --headless=new --disable-gpu --hide-scrollbars --window-size=1120,660 --virtual-time-budget=8000 --screenshot="$DIR/readme_turn_sequence.png" "file://$DIR/readme_turn_sequence.html"

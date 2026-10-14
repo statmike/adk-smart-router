@@ -6,6 +6,7 @@ See [`docs/threat-model.md`](docs/threat-model.md) for the complete security arc
 - Subset-only tool menu pruning (`kept <= live`) and `never_prune` invariants
 - Cold-start, hybrid, and external judge bounds (`PrototypeJudge` menu-cache / docstring-churn caps and `LiveLlmJudge` system-instruction separation)
 - Principal-scoped tool result caching (`user_id` inside SHA-256 cache keys, `tool_context.actions` side-effect blocklisting, and automatic bypass for agents declaring `before_tool_callback`)
+- Data handling and retention for BigQuery `agent_events` prompt/telemetry logging and in-memory tool result caching (`docs/threat-model.md#data-handling-and-retention`)
 - Cloud Storage artifact supply-chain verification (environment matching, pre-download byte cap, SHA-256 verification, and UBJSON format validation)
 
 ## Supported Versions

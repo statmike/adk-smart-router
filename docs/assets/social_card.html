@@ -23,13 +23,23 @@
     padding: 26px 40px 20px;
     display: flex;
     flex-direction: column;
-    border-top: 6px solid #4285F4;
+    border-top: 6px solid #4f46e5;
   }
   .header-row {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     justify-content: space-between;
     gap: 16px;
+  }
+  .brand-title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .brand-icon {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
   }
   h1 {
     margin: 0;
@@ -42,9 +52,9 @@
     font-family: "Roboto Mono", monospace;
     font-size: 15px;
     font-weight: 500;
-    color: #174EA6;
-    background: #E8F0FE;
-    border: 1px solid #AECBFA;
+    color: #3730a3;
+    background: #eef2ff;
+    border: 1px solid #c7d2fe;
     border-radius: 6px;
     padding: 5px 12px;
   }
@@ -82,7 +92,19 @@
 <body>
 <div id="card">
   <div class="header-row">
-    <h1>adk-smart-router</h1>
+    <div class="brand-title">
+      <svg class="brand-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+        <path d="M168,256 L256,256 C288,256 296,128 344,128 L376,128" fill="none" stroke="#64748b" stroke-width="28" stroke-linecap="round"/>
+        <path d="M168,256 L256,256 C288,256 296,384 344,384 L376,384" fill="none" stroke="#64748b" stroke-width="28" stroke-linecap="round" stroke-dasharray="26 28"/>
+        <circle cx="416" cy="128" r="36" fill="none" stroke="#64748b" stroke-width="28"/>
+        <circle cx="416" cy="384" r="36" fill="none" stroke="#64748b" stroke-width="28"/>
+        <path d="M152,256 L348,256" fill="none" stroke="#4f46e5" stroke-width="32" stroke-linecap="round"/>
+        <path d="M312,208 L368,256 L312,304" fill="none" stroke="#4f46e5" stroke-width="32" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="108" cy="256" r="46" fill="#4f46e5"/>
+        <circle cx="424" cy="256" r="38" fill="#0d9488"/>
+      </svg>
+      <h1>adk-smart-router</h1>
+    </div>
     <span class="repo-badge">github.com/statmike/adk-smart-router</span>
   </div>
   <p class="tag">Predictive semantic tool routing &amp; memoization for Google ADK agents — cache-warm menus, verified in BigQuery.</p>
@@ -90,11 +112,11 @@
   <pre class="mermaid">
 flowchart LR
     IN["ADK Runner Turn<br/>user prompt &middot; session<br/>N tool declarations"] --> GATE["Safety &amp; Experiment Gate<br/>@fail_open &middot; session holdout<br/>prefix lock &middot; cache floor"]
-    GATE --> ROUTER["SmartToolRouter<br/>session-locked decision<br/>savings vs. miss_cost_tokens"]
-    ROUTER --> J1["Description Judge<br/>zero-data cold start"]
-    ROUTER --> J2["Exemplar Judge<br/>k-NN over past turns"]
-    ROUTER --> J3["XGBoost + Archetypes<br/>cache-warm fixed menus"]
-    ROUTER --> MEMO["Tool Call Cache<br/>session &amp; cross-session TTL"]
+    GATE --> ROUTER["SmartRouterPlugin<br/>session-locked decision<br/>savings vs. miss_cost_tokens"]
+    ROUTER --> J1["PrototypeJudge<br/>zero-data cold start"]
+    ROUTER --> J2["XGBoost Predictor<br/>cache-warm fixed menus"]
+    ROUTER --> J3["Hybrid Combiner<br/>XGBoost + unseen rescue"]
+    ROUTER --> MEMO["ToolResultCache<br/>principal-scoped TTL"]
     J1 --> OUT["Gemini Call &amp; BQAA Ledger<br/>pruned menu &middot; warm prefix<br/>live A/B &amp; auto-tuner"]
     J2 --> OUT
     J3 --> OUT

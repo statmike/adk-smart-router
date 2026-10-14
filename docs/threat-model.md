@@ -116,6 +116,27 @@ its own `before_tool_callback`, and `cache_hooks` refuses to serve for that agen
 behaviour change made from a diagnostic scan, and it is the only one in the plugin. Nothing else
 `startup_checks` finds changes what the router does.
 
+## Data handling and retention
+
+When `SmartRouterPlugin` is paired with ADK's `BigQueryAgentAnalyticsPlugin` or configured with
+`cacheable_tools`, two classes of runtime data are handled:
+
+- **BigQuery telemetry and user prompts (`agent_events`):** `BigQueryAgentAnalyticsPlugin` streams
+  conversation events (including user prompts, tool call arguments, and `custom_metadata.smart_router`
+  routing provenance) into your BigQuery `agent_events` table. The `smart-router readiness`,
+  `smart-router status`, and `smart-router check-arguments` CLI commands and training scripts query
+  this table (for example, `check-arguments` scans first-turn `USER_MESSAGE_RECEIVED` text to audit
+  whether user messages supply held identifiers). Review your organization's data retention, IAM
+  access controls, and `BigQueryLoggerConfig` content-logging settings before logging prompts to
+  BigQuery.
+- **In-memory tool result caching (`ToolResultCache`):** When tools are listed in `cacheable_tools`,
+  their return payloads are stored in process memory keyed by a SHA-256 digest of
+  `(app_name, user_id, tool_name, canonical_args)` until their configured TTL expires or a mutating
+  tool invalidates the principal's cache entries. Cached tool outputs are never written to disk or
+  exported to BigQuery (`event.custom_metadata["smart_router"]["cache_serves"]` records only the
+  tool name and serve count, never the tool arguments or return payload). Only mark tools as
+  cacheable if their outputs are deterministic and safe to reuse for the same `user_id` principal.
+
 ## Who can write the bucket
 
 The digest proves the booster is the file the metadata named. It does not prove the metadata is
